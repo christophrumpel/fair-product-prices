@@ -11,6 +11,7 @@ class FairProductPricesTest extends TestCase
     /** @test **/
     public function it_gets_customers_location_through_IP(): void
     {
+        // Arrange
         Http::fake([
             'freegeoip.app/*' => Http::response($this->getLocationTestData()),
         ]);
