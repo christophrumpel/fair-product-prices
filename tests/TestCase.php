@@ -1,10 +1,10 @@
 <?php
 
-namespace VendorName\Skeleton\Tests;
+namespace Christophrumpel\FairProductPrices\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use VendorName\Skeleton\SkeletonServiceProvider;
+use Christophrumpel\FairProductPrices\FairProductPricesServiceProvider;
 
 class TestCase extends Orchestra
 {
@@ -13,14 +13,14 @@ class TestCase extends Orchestra
         parent::setUp();
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'Spatie\\Skeleton\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            fn (string $modelName) => 'Spatie\\FairProductPrices\\Database\\Factories\\'.class_basename($modelName).'Factory'
         );
     }
 
     protected function getPackageProviders($app)
     {
         return [
-            SkeletonServiceProvider::class,
+            FairProductPricesServiceProvider::class,
         ];
     }
 
@@ -29,8 +29,25 @@ class TestCase extends Orchestra
         config()->set('database.default', 'testing');
 
         /*
-        include_once __DIR__.'/../database/migrations/create_skeleton_table.php.stub';
+        include_once __DIR__.'/../database/migrations/create_fair-product-prices_table.php.stub';
         (new \CreatePackageTable())->up();
         */
+    }
+
+    public function getLocationTestData(): array
+    {
+        return [
+            "ip" => "11.217.42.113",
+            "country_code" => "AT",
+            "country_name" => "Austria",
+            "region_code" => "3",
+            "region_name" => "Vienna",
+            "city" => "Vienna",
+            "zip_code" => "1230",
+            "time_zone" => "Europe/Vienna",
+            "latitude" => 48.210,
+            "longitude" => 16.3634,
+            "metro_code" => 0,
+        ];
     }
 }
