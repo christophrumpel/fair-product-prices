@@ -33,8 +33,8 @@ class FairProductPricesTest extends TestCase
         Http::fake([
             'purchasing-power-parity.com/*' => Http::response([
                 'ppp' => [
-                    'pppConversionFactor' => 0.9
-                ]
+                    'pppConversionFactor' => 0.9,
+                ],
             ]),
         ]);
         $customerLocation = new CustomerLocation($this->getLocationTestData());
@@ -53,8 +53,8 @@ class FairProductPricesTest extends TestCase
         Http::fake([
             'purchasing-power-parity.com/*' => Http::response([
                 'ppp' => [
-                    'pppConversionFactor' => 0.874636277820489
-                ]
+                    'pppConversionFactor' => 0.874636277820489,
+                ],
             ]),
         ]);
         $customerLocation = new CustomerLocation($this->getLocationTestData());
@@ -73,8 +73,8 @@ class FairProductPricesTest extends TestCase
         Http::fake([
             'purchasing-power-parity.com/*' => Http::response([
                 'ppp' => [
-                    'pppConversionFactor' => 1.2
-                ]
+                    'pppConversionFactor' => 1.2,
+                ],
             ]),
         ]);
         $customerLocation = new CustomerLocation($this->getLocationTestData());
@@ -93,8 +93,8 @@ class FairProductPricesTest extends TestCase
         Http::fake([
             'purchasing-power-parity.com/*' => Http::response([
                 'ppp' => [
-                    'pppConversionFactor' => 0.9
-                ]
+                    'pppConversionFactor' => 0.9,
+                ],
             ]),
         ]);
         $customerLocation = new CustomerLocation($this->getLocationTestData(['country_code' => 'DE']));
@@ -115,8 +115,8 @@ class FairProductPricesTest extends TestCase
             'https://vendors.paddle.com/api/2.0/*' => Http::response([
                 "success" => true,
                 "response" => [
-                    "url" => "https://checkout.paddle.com/checkout/custom/dskfkdsfds"
-                ]
+                    "url" => "https://checkout.paddle.com/checkout/custom/dskfkdsfds",
+                ],
             ]),
         ]);
 
@@ -135,7 +135,7 @@ class FairProductPricesTest extends TestCase
                 "success" => false,
                 "error" => [
                     'message' => "You don't have permission to access this resource",
-                ]
+                ],
             ]),
         ]);
 

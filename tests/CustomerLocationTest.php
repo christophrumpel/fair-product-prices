@@ -25,5 +25,4 @@ class CustomerLocationTest extends TestCase
         $this->assertEquals(16.3634, $customerLocation->getLongitude());
         $this->assertEquals(0, $customerLocation->getMetroCode());
     }
-
 }

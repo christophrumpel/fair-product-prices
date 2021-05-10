@@ -3,10 +3,8 @@
 
 namespace Christophrumpel\FairProductPrices;
 
-
 class CustomerLocation
 {
-
     private string $ip;
     private string $country_code;
     private string $country_name;
@@ -88,5 +86,4 @@ class CustomerLocation
     {
         return $this->metro_code;
     }
-
 }
