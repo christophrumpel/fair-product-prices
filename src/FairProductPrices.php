@@ -28,9 +28,9 @@ class FairProductPrices
             'vendor_id' => config('fair-product-prices.paddle.vendor_id'),
             'vendor_auth_code' => config('fair-product-prices.paddle.auth_code'),
             'product_id' => $paddleProductId,
-            'prices' => $paddleProductPrices
+            'prices' => $paddleProductPrices,
         ]);
-        if (!$response->json()['success']) {
+        if (! $response->json()['success']) {
             throw new RuntimeException($response->json()['error']['message']);
         }
 

@@ -2,9 +2,9 @@
 
 namespace Christophrumpel\FairProductPrices\Tests;
 
+use Christophrumpel\FairProductPrices\FairProductPricesServiceProvider;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Christophrumpel\FairProductPrices\FairProductPricesServiceProvider;
 
 class TestCase extends Orchestra
 {
