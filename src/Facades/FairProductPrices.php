@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Facade;
 /**
  * @see \Christophrumpel\FairProductPrices\FairProductPrices
  */
-class FairProductPricesFacade extends Facade
+class FairProductPrices extends Facade
 {
     protected static function getFacadeAccessor()
     {

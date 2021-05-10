@@ -18,7 +18,7 @@ class FairProductPricesServiceProvider extends PackageServiceProvider
             ->name('fair-product-prices')
             ->hasConfigFile();
 
-        $this->app->bind('fair-product-prices', function($app) {
+        $this->app->bind('fair-product-prices', function() {
             return new FairProductPrices();
         });
     }

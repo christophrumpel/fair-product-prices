@@ -8,7 +8,7 @@ return [
     |
     */
     'pppConversionFactor' => [
-        'DE' => 0.8
+        //'IT' => 0.9
     ],
 
     /*

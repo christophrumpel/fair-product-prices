@@ -4,6 +4,7 @@ namespace Christophrumpel\FairProductPrices\Tests;
 
 use Christophrumpel\FairProductPrices\CustomerLocation;
 use Christophrumpel\FairProductPrices\Facades;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
 class FairProductPricesTest extends TestCase
@@ -17,7 +18,7 @@ class FairProductPricesTest extends TestCase
         ]);
 
         // Act
-        $customerLocation = Facades\FairProductPricesFacade::getLocation('11.111.11.113');
+        $customerLocation = Facades\FairProductPrices::getLocation('11.111.11.113');
 
         // Assert
         $this->assertInstanceOf(CustomerLocation::class, $customerLocation);
@@ -38,7 +39,7 @@ class FairProductPricesTest extends TestCase
         $customerLocation = new CustomerLocation($this->getLocationTestData());
 
         // Act
-        $fairPrice = Facades\FairProductPricesFacade::getFairPrice(100, $customerLocation->getCountryCode());
+        $fairPrice = Facades\FairProductPrices::getFairPrice(100, $customerLocation->getCountryCode());
 
         // Assert
         $this->assertEquals(90, $fairPrice);
@@ -58,7 +59,7 @@ class FairProductPricesTest extends TestCase
         $customerLocation = new CustomerLocation($this->getLocationTestData());
 
         // Act
-        $fairPrice = Facades\FairProductPricesFacade::getFairPrice(99.99, $customerLocation->getCountryCode());
+        $fairPrice = Facades\FairProductPrices::getFairPrice(99.99, $customerLocation->getCountryCode());
 
         // Assert
         $this->assertEquals(87.45, $fairPrice);
@@ -78,7 +79,7 @@ class FairProductPricesTest extends TestCase
         $customerLocation = new CustomerLocation($this->getLocationTestData());
 
         // Act
-        $fairPrice = Facades\FairProductPricesFacade::getFairPrice(100, $customerLocation->getCountryCode());
+        $fairPrice = Facades\FairProductPrices::getFairPrice(100, $customerLocation->getCountryCode());
 
         // Assert
         $this->assertEquals(120, $fairPrice);
@@ -96,9 +97,10 @@ class FairProductPricesTest extends TestCase
             ]),
         ]);
         $customerLocation = new CustomerLocation($this->getLocationTestData(['country_code' => 'DE']));
+        Config::set('fair-product-prices.pppConversionFactor', ['DE' => 0.8]);
 
         // Act
-        $fairPrice = Facades\FairProductPricesFacade::getFairPrice(100, $customerLocation->getCountryCode());
+        $fairPrice = Facades\FairProductPrices::getFairPrice(100, $customerLocation->getCountryCode());
 
         // Assert
         $this->assertEquals(80, $fairPrice);
@@ -118,7 +120,7 @@ class FairProductPricesTest extends TestCase
         ]);
 
         // Act
-        $fairPrice = Facades\FairProductPricesFacade::getPaddlePayLink(1234, ['EUR:19.99']);
+        $fairPrice = Facades\FairProductPrices::getPaddlePayLink(1234, ['EUR:19.99']);
 
         // Assert
         $this->assertStringContainsString('https://checkout.paddle.com/checkout/custom', $fairPrice);
@@ -140,7 +142,7 @@ class FairProductPricesTest extends TestCase
         $this->expectExceptionMessage("You don't have permission to access this resource");
 
         // Act
-        Facades\FairProductPricesFacade::getPaddlePayLink(1234, ['EUR:19.99']);
+        Facades\FairProductPrices::getPaddlePayLink(1234, ['EUR:19.99']);
 
         $this->assertTrue(false);
     }
