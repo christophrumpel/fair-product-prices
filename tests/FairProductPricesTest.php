@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 
 class FairProductPricesTest extends TestCase
 {
-    /** @test **/
+    /** @test * */
     public function it_gets_customers_location_through_IP(): void
     {
         // Arrange
@@ -16,24 +16,26 @@ class FairProductPricesTest extends TestCase
             'freegeoip.app/*' => Http::response($this->getLocationTestData()),
         ]);
 
-    	// Act
-    	$customerLocation = Facades\FairProductPricesFacade::getLocation('11.111.11.113');
+        // Act
+        $customerLocation = Facades\FairProductPricesFacade::getLocation('11.111.11.113');
 
-    	// Assert
+        // Assert
         $this->assertInstanceOf(CustomerLocation::class, $customerLocation);
         $this->assertEquals('AT', $customerLocation->getCountryCode());
     }
 
-    /** @test **/
+    /** @test * */
     public function it_gets_fair_price_for_given_customer_location(): void
     {
-    	// Arrange
+        // Arrange
         Http::fake([
-            'purchasing-power-parity.com/*' => Http::response(['ppp' => [
-                'pppConversionFactor' => 0.9
-            ]]),
+            'purchasing-power-parity.com/*' => Http::response([
+                'ppp' => [
+                    'pppConversionFactor' => 0.9
+                ]
+            ]),
         ]);
-    	$customerLocation = new CustomerLocation($this->getLocationTestData());
+        $customerLocation = new CustomerLocation($this->getLocationTestData());
 
         // Act
         $fairPrice = Facades\FairProductPricesFacade::getFairPrice(100, $customerLocation->getCountryCode());
@@ -42,14 +44,16 @@ class FairProductPricesTest extends TestCase
         $this->assertEquals(90, $fairPrice);
     }
 
-    /** @test **/
+    /** @test * */
     public function it_rounds_fair_prices_for_given_customer_location(): void
     {
         // Arrange
         Http::fake([
-            'purchasing-power-parity.com/*' => Http::response(['ppp' => [
-                'pppConversionFactor' => 0.874636277820489
-            ]]),
+            'purchasing-power-parity.com/*' => Http::response([
+                'ppp' => [
+                    'pppConversionFactor' => 0.874636277820489
+                ]
+            ]),
         ]);
         $customerLocation = new CustomerLocation($this->getLocationTestData());
 
@@ -60,14 +64,16 @@ class FairProductPricesTest extends TestCase
         $this->assertEquals(87.45, $fairPrice);
     }
 
-    /** @test **/
+    /** @test * */
     public function it_calculates_a_higher_price_if_conversation_rate_is_bigger_than_one(): void
     {
         // Arrange
         Http::fake([
-            'purchasing-power-parity.com/*' => Http::response(['ppp' => [
-                'pppConversionFactor' => 1.2
-            ]]),
+            'purchasing-power-parity.com/*' => Http::response([
+                'ppp' => [
+                    'pppConversionFactor' => 1.2
+                ]
+            ]),
         ]);
         $customerLocation = new CustomerLocation($this->getLocationTestData());
 
@@ -76,5 +82,66 @@ class FairProductPricesTest extends TestCase
 
         // Assert
         $this->assertEquals(120, $fairPrice);
+    }
+
+    /** @test * */
+    public function it_uses_custom_conversion_factor_if_defines(): void
+    {
+        // Arrange
+        Http::fake([
+            'purchasing-power-parity.com/*' => Http::response([
+                'ppp' => [
+                    'pppConversionFactor' => 0.9
+                ]
+            ]),
+        ]);
+        $customerLocation = new CustomerLocation($this->getLocationTestData(['country_code' => 'DE']));
+
+        // Act
+        $fairPrice = Facades\FairProductPricesFacade::getFairPrice(100, $customerLocation->getCountryCode());
+
+        // Assert
+        $this->assertEquals(80, $fairPrice);
+    }
+
+    /** @test * */
+    public function it_creates_paddle_pay_link_for_price(): void
+    {
+        // Arrange
+        Http::fake([
+            'https://vendors.paddle.com/api/2.0/*' => Http::response([
+                "success" => true,
+                "response" => [
+                    "url" => "https://checkout.paddle.com/checkout/custom/dskfkdsfds"
+                ]
+            ]),
+        ]);
+
+        // Act
+        $fairPrice = Facades\FairProductPricesFacade::getPaddlePayLink(1234, ['EUR:19.99']);
+
+        // Assert
+        $this->assertStringContainsString('https://checkout.paddle.com/checkout/custom', $fairPrice);
+    }
+
+    /** @test * */
+    public function it_throws_exception_if_credentials_are_wrong(): void
+    {
+        Http::fake([
+            'https://vendors.paddle.com/api/2.0/*' => Http::response([
+                "success" => false,
+                "error" => [
+                    'message' => "You don't have permission to access this resource",
+                ]
+            ]),
+        ]);
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage("You don't have permission to access this resource");
+
+        // Act
+        Facades\FairProductPricesFacade::getPaddlePayLink(1234, ['EUR:19.99']);
+
+        $this->assertTrue(false);
     }
 }

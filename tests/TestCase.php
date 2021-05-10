@@ -34,9 +34,9 @@ class TestCase extends Orchestra
         */
     }
 
-    public function getLocationTestData(): array
+    public function getLocationTestData(array $dataToMerge = []): array
     {
-        return [
+        return array_merge([
             "ip" => "11.217.42.113",
             "country_code" => "AT",
             "country_name" => "Austria",
@@ -48,6 +48,6 @@ class TestCase extends Orchestra
             "latitude" => 48.210,
             "longitude" => 16.3634,
             "metro_code" => 0,
-        ];
+        ], $dataToMerge);
     }
 }
