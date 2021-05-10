@@ -1,4 +1,6 @@
-# Calculate Fair Product Prices Based On Your Customer's Location (Purchasing Power Parity)
+# Fair Product Prices
+
+Calculate Fair Product Prices Based On Your Customer's Location (Purchasing Power Parity)
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/christophrumpel/fair-product-prices.svg?style=flat-square)](https://packagist.org/packages/christophrumpel/fair-product-prices)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/christophrumpel/fair-product-prices/run-tests?label=tests)](https://github.com/christophrumpel/fair-product-prices/actions?query=workflow%3Arun-tests+branch%3Amaster)
