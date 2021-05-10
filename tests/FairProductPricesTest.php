@@ -6,6 +6,7 @@ use Christophrumpel\FairProductPrices\CustomerLocation;
 use Christophrumpel\FairProductPrices\Facades;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
+use RuntimeException;
 
 class FairProductPricesTest extends TestCase
 {
@@ -18,7 +19,7 @@ class FairProductPricesTest extends TestCase
         ]);
 
         // Act
-        $customerLocation = Facades\FairProductPrices::getLocation('11.111.11.113');
+        $customerLocation = Facades\FairProductPrices::getCustomerLocation('11.111.11.113');
 
         // Assert
         $this->assertInstanceOf(CustomerLocation::class, $customerLocation);
@@ -138,7 +139,7 @@ class FairProductPricesTest extends TestCase
             ]),
         ]);
 
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage("You don't have permission to access this resource");
 
         // Act

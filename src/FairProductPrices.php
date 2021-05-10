@@ -8,7 +8,7 @@ use RuntimeException;
 
 class FairProductPrices
 {
-    public function getLocation(string $ip): object
+    public function getCustomerLocation(string $ip): object
     {
         $response = Http::get("https://freegeoip.app/json/{$ip}");
 

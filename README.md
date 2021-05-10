@@ -1,4 +1,4 @@
-# Calculate fair product prices based on your customer's location (Purchasing Power Parity)
+# Calculate Fair Product Prices Based On Your Customer's Location (Purchasing Power Parity)
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/christophrumpel/fair-product-prices.svg?style=flat-square)](https://packagist.org/packages/christophrumpel/fair-product-prices)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/christophrumpel/fair-product-prices/run-tests?label=tests)](https://github.com/christophrumpel/fair-product-prices/actions?query=workflow%3Arun-tests+branch%3Amaster)
@@ -6,24 +6,6 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/christophrumpel/fair-product-prices.svg?style=flat-square)](https://packagist.org/packages/christophrumpel/fair-product-prices)
 
 ---
-This repo can be used as to scaffold a Laravel package. Follow these steps to get started:
-
-1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this fair-product-prices
-2. Run "./configure-fair-product-prices.sh" to run a script that will replace all placeholders throughout all the files
-3. Remove this block of text.
-4. Have fun creating your package.
-5. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/fair-product-prices.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/fair-product-prices)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
 
 ## Installation
 
@@ -31,13 +13,6 @@ You can install the package via composer:
 
 ```bash
 composer require christophrumpel/fair-product-prices
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --provider="Christophrumpel\FairProductPrices\FairProductPricesServiceProvider" --tag="fair-product-prices-migrations"
-php artisan migrate
 ```
 
 You can publish the config file with:
@@ -48,15 +23,45 @@ php artisan vendor:publish --provider="Christophrumpel\FairProductPrices\FairPro
 This is the contents of the published config file:
 
 ```php
+<?php
+
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | You can override the ppp conversion factor for specific countries
+    |--------------------------------------------------------------------------
+    |
+    */
+    'pppConversionFactor' => [
+        //'IT' => 0.9
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Paddle credentials for creating a Paddle pay link
+    |--------------------------------------------------------------------------
+    |
+    */
+    'paddle' => [
+        'vendor_id' => env('PADDLE_VENDOR_ID'),
+        'auth_code' => env('PADDLE_AUTH_CODE'),
+    ]
+
 ];
+
 ```
 
 ## Usage
 
 ```php
-$fair-product-prices = new Christophrumpel\FairProductPrices();
-echo $fair-product-prices->echoPhrase('Hello, Spatie!');
+use Christophrumpel\FairProductPrices\Facades\FairProductPrices;
+
+// Determine your customer's location
+$customerLocation = FairProductPrices::getLocation('IP Address');
+
+// Calculate a fair price
+$defaultPrice = 100;
+$fairPrice = FairProductPrices::getFairPrice($defaultPrice, $customerLocation->getCountryCode());
 ```
 
 ## Testing
